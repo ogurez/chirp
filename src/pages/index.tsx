@@ -20,7 +20,7 @@ const CreatePostWizard = () => {
 		<div className="flex gap-3 w-full">
 			<img
 				src={user.profileImageUrl}
-				alt="Profile image"
+				alt="Profile image!"
 				className="w-16 h-16 rounded-full"
 			/>
 			<input
