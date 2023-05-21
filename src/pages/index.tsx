@@ -2,6 +2,7 @@ import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import Image from "next/image";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
@@ -37,10 +38,12 @@ const PostView = (props: PostWithUser) => {
 	const { post, author } = props;
 	return (
 		<div key={post.id} className="flex gap-3 p-4 border-b border-slate-400 ">
-			<img
+			<Image
 				src={author?.profileImageUrl}
-				alt="Author profile image"
+				alt={`${author.username} profile image`}
 				className="w-14 h-14 rounded-full"
+				width={56}
+				height={56}
 			/>
 			<div className="flex flex-col">
 				<div className="flex text-slate-300 font-bold">
