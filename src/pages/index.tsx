@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import Head from "next/head";
@@ -6,15 +7,23 @@ import Image from "next/image";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { LoadingPage } from "~/components/loading";
+import { api } from "~/utils/api";
+import type { RouterOutputs } from "~/utils/api";
 
 dayjs.extend(relativeTime);
 
-import { api } from "~/utils/api";
-
-import type { RouterOutputs } from "~/utils/api";
-
 const CreatePostWizard = () => {
+  const [input, setInput] = useState("");
   const { user } = useUser();
+
+  const ctx = api.useContext();
+
+  const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
+    onSuccess: () => {
+      setInput("");
+      ctx.posts.getAll.invalidate();
+    },
+  });
 
   if (!user) return null;
 
@@ -28,7 +37,12 @@ const CreatePostWizard = () => {
       <input
         placeholder="Type some chirps!"
         className="grow bg-transparent outline-none"
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        disabled={isPosting}
       />
+      <button onClick={(e) => mutate({ content: input })}>Post</button>
     </div>
   );
 };
